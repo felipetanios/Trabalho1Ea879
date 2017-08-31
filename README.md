@@ -1,5 +1,12 @@
 # Trabalho 1 da disciplina de EA879
-Esse repositório contem o código fonte do [primeiro trabalho da disciplina EA879](https://github.com/EAxxx/EA879-2017s2/tree/master/trabalho1)
+Esse repositório contem o código fonte do [primeiro trabalho da disciplina EA879](https://github.com/EAxxx/EA879-2017s2/tree/master/trabalho1) feito pelo grupo 2.
+
+Os membros do grupo são :
+* [Felipe Tanios](https://github.com/felipetanios)
+* [Luana Oliveira](https://github.com/luoliveira)
+* [Vitória Reinoso](https://github.com/vreinoso)
+* [Amanda Coelho](https://github.com/amandawcoelho)
+
 Neste trabalhos devemos implementar as seguintes funções:
 
 #### Brilho
