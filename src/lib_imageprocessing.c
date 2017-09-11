@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -8,9 +7,11 @@
 
 /*
 imagem abrir_imagem(char *nome_do_arquivo);
-void salvar_imagem(char *nome_do_arquivo);
-void liberar_imagem(imagem *i);
- */
+void salvar_imagem(char *nome_do_arquivo, imagem *I)
+void liberar_imagem(imagem *I);
+float valor_maximo (imagem *I);
+void brilho (imagem *I, char op, float valor);
+*/
 
 imagem abrir_imagem(char *nome_do_arquivo) {
   FIBITMAP *bitmapIn;
@@ -51,6 +52,12 @@ imagem abrir_imagem(char *nome_do_arquivo) {
 
 }
 
+void liberar_imagem(imagem *I) {
+  free(I->r);
+  free(I->g);
+  free(I->b);
+}
+
 void salvar_imagem(char *nome_do_arquivo, imagem *I) {
   FIBITMAP *bitmapOut;
   RGBQUAD color;
@@ -73,4 +80,74 @@ void salvar_imagem(char *nome_do_arquivo, imagem *I) {
 
   FreeImage_Save(FIF_JPEG, bitmapOut, nome_do_arquivo, JPEG_DEFAULT);
 }
+
+void brilho (imagem *I, char op, float valor) {
+
+  if (op == '*') {
+    for (int i=0; i<I->width; i++) {
+       for (int j=0; j<I->height; j++) {
+        int idx;
+
+        idx = i + (j*I->width);
+        I->r[idx] *= valor;
+        I->g[idx] *= valor;
+        I->b[idx] *= valor;
+
+      }
+    }
+
+    if (op == '/') {
+    for (int i=0; i<I->width; i++) {
+       for (int j=0; j<I->height; j++) {
+        int idx;
+
+        idx = i + (j*I->width);
+        I->r[idx] /= valor;
+        I->g[idx] /= valor;
+        I->b[idx] /= valor;
+
+      }
+    }
+
+}
+
+float valor_maximo (imagem *I) {
+  float maior = -1;
+  float valorPixel;
+
+  for (int i=0; i<I->width; i++) {
+     for (int j=0; j<I->height; j++) {
+      
+      int idx;
+      idx = i + (j*I->width);
+      valorPixel = sqrt(I->r[idx]^2 + I->g[idx]^2 + I->b[idx]^2);
+      if (valorPixel > maior) maior = valorPixel;
+
+    }
+  }
+
+  return maior;
+
+}
+
+int main () {
+  
+  float valor;
+  scanf ("%f", &valor);
+  
+  char nome = "imagem.png";
+  char op = '*';
+  float valor = 2;
+  float maiorPixel;
+  imagem figura;
+  figura = abrir_imagem (&nome);
+    
+  brilho (&figura, op, valor);
+  
+  maiorPixel = valor_maximo(&figura);
+  printf ("%f", maiorPixel); 
+  
+}
+
+
 
