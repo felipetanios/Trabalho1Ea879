@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -51,6 +50,12 @@ imagem abrir_imagem(char *nome_do_arquivo) {
 
 }
 
+void liberar_imagem(imagem *I) {
+  free(I->r);
+  free(I->g);
+  free(I->b);
+}
+
 void salvar_imagem(char *nome_do_arquivo, imagem *I) {
   FIBITMAP *bitmapOut;
   RGBQUAD color;
@@ -74,3 +79,49 @@ void salvar_imagem(char *nome_do_arquivo, imagem *I) {
   FreeImage_Save(FIF_JPEG, bitmapOut, nome_do_arquivo, JPEG_DEFAULT);
 }
 
+void brilho (imagem *I, char op, float valor) {
+
+  if (op == '*') {
+    for (int i=0; i<I->width; i++) {
+       for (int j=0; j<I->height; j++) {
+        int idx;
+
+        idx = i + (j*I->width);
+        I->r[idx] *= valor;
+        I->g[idx] *= valor;
+        I->b[idx] *= valor;
+
+      }
+    }
+
+    if (op == '/') {
+    for (int i=0; i<I->width; i++) {
+       for (int j=0; j<I->height; j++) {
+        int idx;
+
+        idx = i + (j*I->width);
+        I->r[idx] /= valor;
+        I->g[idx] /= valor;
+        I->b[idx] /= valor;
+
+      }
+    }
+
+}
+
+float valor_maximo (imagem *I) {
+  float maior = -1;
+
+  for (int i=0; i<I->width; i++) {
+     for (int j=0; j<I->height; j++) {
+      
+      int idx;
+      idx = i + (j*I->width);
+      if (I->r[idx] > maior) maior = I->r[idx];
+      if (I->g[idx] > maior) maior = I->g[idx];
+      if (I->b[idx] > maior) maior = I->b[idx];
+
+    }
+  }
+
+}
