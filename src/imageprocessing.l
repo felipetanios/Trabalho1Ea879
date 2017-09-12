@@ -5,6 +5,8 @@
 void yyerror(char *);
 
 #include "y.tab.h"
+
+char *p = NULL;
 %}
 
 
@@ -16,6 +18,10 @@ void yyerror(char *);
         return VAR;
        }
 
+[0-9]+(\.[0-9]+)? {
+                    yylval.fval = atof(yytext);
+                    return MULTIPLY;
+                  }
 
 \" { return ASPA; }
 
@@ -24,12 +30,21 @@ void yyerror(char *);
           yylval.strval[i] = yytext[i];
 
         yylval.strval[yyleng] = '\0';
-        printf ("Achei nome: %s\n", yylval.strval);
         return STRING;
        }
 
 [=]     {
           return IGUAL;
+        }
+
+[\*\/]     {
+          yylval.ival = yytext[0];
+          return VEZES;
+        }
+
+[\]\[]  {
+          yylval.ival = yytext[0];
+          return COLCHETE;
         }
 
 \n   {

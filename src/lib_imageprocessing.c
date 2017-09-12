@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "imageprocessing.h"
 
@@ -7,9 +8,11 @@
 
 /*
 imagem abrir_imagem(char *nome_do_arquivo);
-void salvar_imagem(char *nome_do_arquivo);
-void liberar_imagem(imagem *i);
- */
+void salvar_imagem(char *nome_do_arquivo, imagem *I)
+void liberar_imagem(imagem *I);
+float valor_maximo (imagem *I);
+void brilho (imagem *I, char op, float valor);
+*/
 
 imagem abrir_imagem(char *nome_do_arquivo) {
   FIBITMAP *bitmapIn;
@@ -60,7 +63,7 @@ void salvar_imagem(char *nome_do_arquivo, imagem *I) {
   FIBITMAP *bitmapOut;
   RGBQUAD color;
 
-  printf("Salvando imagem %d por %d...\n", I->width, I->height);
+  printf("Salvando imagem...\n");
   bitmapOut = FreeImage_Allocate(I->width, I->height, 24, 0, 0, 0);
 
    for (int i=0; i<I->width; i++) {
@@ -88,11 +91,15 @@ void brilho (imagem *I, char op, float valor) {
 
         idx = i + (j*I->width);
         I->r[idx] *= valor;
+        if (I->r[idx] > 255) I->r[idx] = 255;
         I->g[idx] *= valor;
+        if (I->g[idx] > 255) I->g[idx] = 255;
         I->b[idx] *= valor;
+        if (I->b[idx] > 255) I->b[idx] = 255;
 
       }
     }
+  }
 
     if (op == '/') {
     for (int i=0; i<I->width; i++) {
@@ -107,21 +114,24 @@ void brilho (imagem *I, char op, float valor) {
       }
     }
 
+  }
 }
 
 float valor_maximo (imagem *I) {
   float maior = -1;
+  double valorPixel;
 
   for (int i=0; i<I->width; i++) {
      for (int j=0; j<I->height; j++) {
-      
+
       int idx;
       idx = i + (j*I->width);
-      if (I->r[idx] > maior) maior = I->r[idx];
-      if (I->g[idx] > maior) maior = I->g[idx];
-      if (I->b[idx] > maior) maior = I->b[idx];
+      valorPixel = sqrt(I->r[idx]*I->r[idx] + I->g[idx]*I->g[idx] + I->b[idx]*I->b[idx]);
+      if (valorPixel > maior) maior = valorPixel;
 
     }
   }
+
+  return maior;
 
 }
